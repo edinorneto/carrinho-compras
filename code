@@ -1,0 +1,60 @@
+class Produto:
+    def __init__(self, nome, preco, quantidade):
+        self.nome = nome
+        self.preco = preco
+        self.quantidade = quantidade
+
+    def __repr__(self):
+        total = self.preco * self.quantidade
+        return f"Produto: {self.nome} | Quantidade: {self.quantidade} | Total: R$ {total:.2f}"
+
+
+carrinho = []
+
+print("\nBem-vindo ao Carrinho de Compras!\n")
+
+while True:
+    nome = input("Digite o nome do produto: ")
+
+    while True:
+        try:
+            preco = float(input("Digite o preço unitário: R$ "))
+            if preco < 0:
+                print("O preço não pode ser negativo.")
+                continue
+            break
+        except ValueError:
+            print("Digite um número válido para o preço.")
+
+    while True:
+        try:
+            quantidade = int(input("Digite a quantidade: "))
+            if quantidade < 1:
+                print("Quantidade precisa ser pelo menos 1.")
+                continue
+            break
+        except ValueError:
+            print("Digite um número inteiro válido para a quantidade.")
+
+    carrinho.append(Produto(nome, preco, quantidade))
+
+    continuar = input("Deseja adicionar mais produtos? (s/n): ").strip().lower()
+    if continuar != "s":
+        break
+
+print("\nProdutos no carrinho:")
+total_compra = 0
+
+for item in carrinho:
+    print(f" - {item}")
+    total_compra += item.preco * item.quantidade
+
+print(f"\nTotal da compra: R$ {total_compra:.2f}")
+
+with open("relatorio_compra.txt", "w", encoding="utf-8") as arquivo:
+    arquivo.write("RELATÓRIO DE COMPRA\n\n")
+    for item in carrinho:
+        arquivo.write(f"{item}\n")
+    arquivo.write(f"\nTotal da compra: R$ {total_compra:.2f}\n")
+
+print("\nRelatório salvo em: relatorio_compra.txt")
